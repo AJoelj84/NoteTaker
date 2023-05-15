@@ -1,6 +1,16 @@
 [
     {
-        "title":"Test Title",
-        "text":"Test text"
+        "title": "Test Title",
+        "text": "Test text"
+    },
+    {
+        "title": "Test Note",
+        "text": "testing the note",
+        "note_id": "c0a0"
+    },
+    {
+        "title": "Test Note",
+        "text": "testing note taker",
+        "note_id": "5b62"
     }
 ]
