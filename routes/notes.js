@@ -1,6 +1,6 @@
 const notes = require('express').Router();
-const { readFromFile, writeToFile, readAndAppend } = require('../helpers/fsUtils');
-
+const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
+const { writeToFile } = require('../helpers/fsUtils');
 const uuid = require('../helpers/uuid');
 
 console.log("notes running");
@@ -28,48 +28,24 @@ notes.post('/', (req, res) => {
     }
   });
 
-
-  notes.get('/:id', (req, res) => {
-    console.info(`${req.method} request received for a single note`);
-    const noteId = req.params.id;
-    readFromFile('./db/db.json')
-      .then((data) => {
-        const notes = JSON.parse(data);
-        const note = notes.find((note) => note.note_id === noteId);
-        if (note) {
-          res.json(note);
-        } else {
-          res.status(404).json({ message: 'Note not found' });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
-      });
-  });
-  
-
-
-
-
-
-
   notes.delete('/:id', (req, res) => {
     console.info(`${req.method} request received to delete a note`);
+    
     const noteId = req.params.id;
+  
     readFromFile('./db/db.json')
-      .then((data) => {
-        let notes = JSON.parse(data);
-        notes = notes.filter((note) => note.note_id !== noteId);
-        writeToFile('./db/db.json', notes);
-        res.json('Note deleted successfully');
+      .then((data) => JSON.parse(data))
+      .then((notes) => {
+        const updatedNotes = notes.filter((note) => note.note_id !== noteId);
+        writeToFile('./db/db.json', updatedNotes);
+        res.json(`Note deleted successfully 🚀`);
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json('Error in deleting note');
       });
   });
   
-
   
+
 module.exports = notes;
